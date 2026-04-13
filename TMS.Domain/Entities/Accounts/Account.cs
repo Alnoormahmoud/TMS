@@ -1,0 +1,23 @@
+﻿using System;
+using TMS.Domain.Entities.Bases;
+using TMS.Domain.Entities.People;
+using TMS.Domain.Entities.TransactionEntries;
+using TMS.Domain.Entities.Users;
+
+namespace TMS.Domain.Entities.Accounts
+{
+    public class Account : AuditableEntity
+    {
+        public string Number { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public decimal Balance { get; set; }
+        public bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        // TODO: الأفضل أن تضاف
+        public int PersonId { get; set; }
+        public virtual Person Person { get; set; } = null!;
+
+        public virtual ICollection<TransactionEntry> TransactionEntries { get; set; } = new List<TransactionEntry>();
+    }
+}
