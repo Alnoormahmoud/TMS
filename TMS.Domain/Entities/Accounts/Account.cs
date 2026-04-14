@@ -2,7 +2,6 @@
 using TMS.Domain.Entities.Bases;
 using TMS.Domain.Entities.People;
 using TMS.Domain.Entities.TransactionEntries;
-using TMS.Domain.Entities.Users;
 
 namespace TMS.Domain.Entities.Accounts
 {
