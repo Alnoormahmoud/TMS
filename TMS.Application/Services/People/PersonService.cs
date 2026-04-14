@@ -23,6 +23,7 @@ namespace TMS.Application.Services.People
                 Email = dto.Email,
                 Phone = dto.Phone,
                 DateOfBirth = dto.DateOfBirth
+                
             };
 
             return await _repo.AddAsync(person);
