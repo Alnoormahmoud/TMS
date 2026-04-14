@@ -7,9 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
-    <Folder Include="DbContext\" />
-    <Folder Include="Repositories\" />
+    <Folder Include="Configurations\Accounts\" />
+    <Folder Include="Configurations\People\" />
+    <Folder Include="Configurations\TransactionEntries\" />
+    <Folder Include="Configurations\Transactions\" />
+    <Folder Include="Configurations\Users\" />
+    <Folder Include="Repositories\Accounts\" />
+    <Folder Include="Repositories\People\" />
+    <Folder Include="Repositories\TransactionEntries\" />
+    <Folder Include="Repositories\Transactions\" />
+    <Folder Include="Repositories\Users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.14" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.14">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
