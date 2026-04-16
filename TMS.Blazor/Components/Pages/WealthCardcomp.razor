@@ -1,0 +1,39 @@
+@rendermode InteractiveServer
+
+
+
+<!-- Wealth Card Section -->
+<section class="mb-12">
+<div class="relative overflow-hidden bg-primary rounded-[2rem] p-8 md:p-12 text-white shadow-2xl shadow-blue-900/20">
+<div class="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-20 -mt-20 blur-3xl"></div>
+<div class="absolute bottom-0 left-0 w-48 h-48 bg-primary-container/20 rounded-full -ml-10 -mb-10 blur-2xl"></div>
+<div class="relative z-10">
+<p class="text-primary-fixed-dim font-medium mb-2 tracking-wide uppercase text-xs">Current Balance</p>
+<h2 class="text-5xl md:text-6xl font-headline font-extrabold mb-8 tracking-tight">$ @balance</h2>
+<div class="flex flex-wrap gap-4">
+<NavLink class="flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-xl font-headline font-bold hover:bg-surface-container-lowest transition-all active:scale-95 shadow-lg" href="/send">
+    <span class="material-symbols-outlined"  data-icon="payments">payments</span>
+    <span>Send</span>
+</NavLink>
+<NavLink  class="flex items-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-xl font-headline font-bold hover:bg-white/20 transition-all active:scale-95" href="/receive">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Receive</span>
+</NavLink>
+</div>
+</div>
+</div>
+</section>
+@code
+{
+    [Parameter]
+    public double balance{get; set;}=5000;
+    private void HandelSendClick()
+    {
+        
+    }
+    private void HandelReceiveClick()
+    {
+        
+    }
+
+}

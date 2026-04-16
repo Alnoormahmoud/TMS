@@ -23,19 +23,19 @@ namespace TMS.Application.Services.People
                 Email = dto.Email,
                 Phone = dto.Phone,
                 DateOfBirth = dto.DateOfBirth
+                
             };
 
-            return await _repo.AddAsync(person);
+            return await _repo
+                .AddAsync(person);
         }
 
         public async Task<bool> UpdateAsync(PersonToUpdateDTO dto)
         {
-            var person = await _repo.GetByIdAsync(dto.Id);
+            var person = await _repo
+                .GetByIdAsync(dto.Id);
 
-            if (person is null)
-            {
-                return false;
-            }
+            if (person is null) return false;
 
             person.FirstName = dto.FirstName;
             person.LastName = dto.LastName;
@@ -43,19 +43,22 @@ namespace TMS.Application.Services.People
             person.Phone = dto.Phone;
             person.DateOfBirth = dto.DateOfBirth;
 
-            return await _repo.UpdateAsync(person);
+            return await _repo
+                .UpdateAsync(person);
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var person = await _repo.GetByIdAsync(id);
+            var person = await _repo
+                .GetByIdAsync(id);
 
             return person is not null && await _repo.DeleteAsync(person);
         }
 
         public async Task<PersonDTO?> GetByIdAsync(int id)
         {
-            var person = await _repo.GetByIdAsync(id);
+            var person = await _repo
+                .GetByIdAsync(id);
 
             return person is null 
                 ? null 
@@ -64,9 +67,11 @@ namespace TMS.Application.Services.People
 
         public async Task<IEnumerable<PersonDTO>> GetAllAsync()
         {
-            var people = await _repo.GetAllAsync();
+            var people = await _repo
+                .GetAllAsync();
 
-            return people.Select(MapToDTO);
+            return people
+                .Select(MapToDTO);
         }
 
         private static PersonDTO MapToDTO(Person person)

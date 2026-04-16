@@ -2,7 +2,7 @@
 using TMS.Application.DTOs.People;
 using TMS.Application.Interfaces.People;
 
-namespace TMS.API.Controllers
+namespace TMS.API.Controllers.People
 {
     [Route("api/PeopleApi")]
     [ApiController]
@@ -22,7 +22,7 @@ namespace TMS.API.Controllers
         public async Task<ActionResult<PersonDTO>> AddPerson(PersonToAddDTO personToAdd)
         {
             if (personToAdd is null || string.IsNullOrWhiteSpace(personToAdd.FirstName) || string.IsNullOrWhiteSpace(personToAdd.LastName) 
-                || string.IsNullOrWhiteSpace(personToAdd.Email) || personToAdd.Age < 18)
+                || string.IsNullOrWhiteSpace(personToAdd.Email))
             {
                 return BadRequest($"البيانات المدخلة غير صحيحة");
             }
@@ -42,7 +42,7 @@ namespace TMS.API.Controllers
         public async Task<ActionResult<PersonDTO>> UpdatePerson(PersonToUpdateDTO personToUpdate)
         {
             if (personToUpdate is null || string.IsNullOrWhiteSpace(personToUpdate.FirstName) || string.IsNullOrWhiteSpace(personToUpdate.LastName)
-                || string.IsNullOrWhiteSpace(personToUpdate.Email) || personToUpdate.Age < 18)
+                || string.IsNullOrWhiteSpace(personToUpdate.Email))
             {
                 return BadRequest($"البيانات المدخلة غير صحيحة");
             }
@@ -54,7 +54,7 @@ namespace TMS.API.Controllers
                 : Problem("حدثت مشكلة عند الإتصال بالخادك");
         }
 
-        [HttpDelete("DeletePerson")]
+        [HttpDelete("DeletePerson/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -72,7 +72,7 @@ namespace TMS.API.Controllers
                 : Problem("حدثت مشكلة عند الإتصال بالخادك");
         }
 
-        [HttpGet("GetPersonById", Name = "GetPersonById")]
+        [HttpGet("GetPersonById/{id}", Name = "GetPersonById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

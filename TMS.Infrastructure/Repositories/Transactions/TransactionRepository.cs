@@ -38,7 +38,7 @@ namespace TMS.Infrastructure.Repositories.Transactions
 
         }
         
-        private async Task<int> _AddTransactionAsync(TransactionType Type, decimal Amount)
+        public async Task<int> AddAsync(TransactionType Type, decimal Amount)
         {
             var NewTransaction = new Transaction()
             {
@@ -51,176 +51,165 @@ namespace TMS.Infrastructure.Repositories.Transactions
             return NewTransaction.Id;
         }
 
-        private async Task<int> _AddEntryAsync(EntryType Type, int TransactionId, int AccountId)
-        {
-            var NewEntry = new TransactionEntry()
-            {
-                EntryType = Type,
-                TransactionId = TransactionId,
-                AccountId = AccountId
-            };
-            await _Context.TransactionEntries.AddAsync(NewEntry);
+       
 
-            return NewEntry.Id;
-        }
-
-        public async Task<int?> TransferAsync(TransferDTO dto)
-        {
+        //public async Task<int?> TransferAsync(TransferDTO dto)
+        //{
             
-            using var transaction = await _Context.Database.BeginTransactionAsync();
-            int? NewTransactionId = null;
-            try
-            {
-                var FromAccount = await _GetAccountAsync(dto.FromAccountNumber);
-                if (FromAccount is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error invalid FromAccountNumber
-                }
+        //    using var transaction = await _Context.Database.BeginTransactionAsync();
+        //    int? NewTransactionId = null;
+        //    try
+        //    {
+        //        var FromAccount = await _GetAccountAsync(dto.FromAccountNumber);
+        //        if (FromAccount is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;// Error invalid FromAccountNumber
+        //        }
                 
-                var ToAccount = await _GetAccountAsync(dto.ToAccountNumber);
-                if (ToAccount is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error invalid ToAccountNumber
-                }
+        //        var ToAccount = await _GetAccountAsync(dto.ToAccountNumber);
+        //        if (ToAccount is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;// Error invalid ToAccountNumber
+        //        }
 
 
-                 NewTransactionId = await _TransferHelper(FromAccount, ToAccount, dto.Amount);
+        //         NewTransactionId = await _TransferHelper(FromAccount, ToAccount, dto.Amount);
 
 
-                await _Context.SaveChangesAsync();
-                await transaction.CommitAsync();
+        //        await _Context.SaveChangesAsync();
+        //        await transaction.CommitAsync();
 
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                return null;
-            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await transaction.RollbackAsync();
+        //        return null;
+        //    }
 
-            return NewTransactionId;
-        }
+        //    return NewTransactionId;
+        //}
 
-        public async Task<int?> WithdrawAsync(WithdrawDTO dto)
-        {
-            using var transaction = await _Context.Database.BeginTransactionAsync();
-            int? NewTransactionId = null;
-            try
-            {
+        //public async Task<int?> WithdrawAsync(DepositWithdrawDTO dto)
+        //{
+        //    using var transaction = await _Context.Database.BeginTransactionAsync();
+        //    int? NewTransactionId = null;
+        //    try
+        //    {
                
-                var Account = await _GetAccountAsync(dto.AccountNumber);
-                if (Account is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error invalid accountNumber
-                }
+        //        var Account = await _GetAccountAsync(dto.AccountNumber);
+        //        if (Account is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;// Error invalid accountNumber
+        //        }
 
-                NewTransactionId = await _WithdrawalHelperAsync(Account, dto.Amount);
-                if (NewTransactionId is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error insufficient Balance or Amount < 0
-                }
+        //        NewTransactionId = await _WithdrawalHelperAsync(Account, dto.Amount);
+        //        if (NewTransactionId is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;// Error insufficient Balance or Amount < 0
+        //        }
 
-                await _Context.SaveChangesAsync();
-                await transaction.CommitAsync();
+        //        await _Context.SaveChangesAsync();
+        //        await transaction.CommitAsync();
 
-            }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                return null;
-            }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await transaction.RollbackAsync();
+        //        return null;
+        //    }
 
-            return NewTransactionId;
-        }
+        //    return NewTransactionId;
+        //}
 
-        public async Task<int?> DepositAsync(DepositDTO dto)
-        {
-            using var transaction = await _Context.Database.BeginTransactionAsync();
-            int? NewTransactionId = null;
+        //public async Task<int?> DepositAsync(DepositWithdrawDTO dto)
+        //{
+        //    using var transaction = await _Context.Database.BeginTransactionAsync();
+        //    int? NewTransactionId = null;
 
-            try
-            {
-                var Account = await _GetAccountAsync(dto.AccountNumber);
-                if (Account is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;
-                }
+        //    try
+        //    {
+        //        var Account = await _GetAccountAsync(dto.AccountNumber);
+        //        if (Account is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;
+        //        }
 
-                NewTransactionId = await _DepositHelperAsync(Account, dto.Amount);
-                if (NewTransactionId is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error Amount < 0
-                }
+        //        NewTransactionId = await _DepositHelperAsync(Account, dto.Amount);
+        //        if (NewTransactionId is null)
+        //        {
+        //            await transaction.RollbackAsync();
+        //            return null;// Error Amount < 0
+        //        }
 
-                await _Context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch (Exception)
-            {
-               await transaction.RollbackAsync();
-                return null;
-            }
+        //        await _Context.SaveChangesAsync();
+        //        await transaction.CommitAsync();
+        //    }
+        //    catch (Exception)
+        //    {
+        //       await transaction.RollbackAsync();
+        //        return null;
+        //    }
 
-            return NewTransactionId;
-        }
+        //    return NewTransactionId;
+        //}
 
        
-        private async Task<int?> _DepositHelperAsync(Account Account, decimal Amount)
-        {
-            if (Amount < 0)
-                return null;
+        //private async Task<int?> _DepositHelperAsync(Account Account, decimal Amount)
+        //{
+        //    if (Amount < 0)
+        //        return null;
 
-            Account.Balance += Amount;
+        //    Account.Balance += Amount;
 
-           int NewTransactionId = await _AddTransactionAsync(TransactionType.Deposit, Amount);
+        //   int NewTransactionId = await _AddTransactionAsync(TransactionType.Deposit, Amount);
 
-            await _AddEntryAsync(EntryType.In, NewTransactionId, Account.Id);
+        //    await _AddEntryAsync(EntryType.In, NewTransactionId, Account.Id);
 
-            return NewTransactionId;
-        }
+        //    return NewTransactionId;
+        //}
 
-        private async Task<int?> _WithdrawalHelperAsync(Account Account, decimal Amount)
-        {
-            if (Account.Balance < Amount || Amount < 0) 
-                return null;
+        //private async Task<int?> _WithdrawalHelperAsync(Account Account, decimal Amount)
+        //{
+        //    if (Account.Balance < Amount || Amount < 0) 
+        //        return null;
 
-            Account.Balance -= Amount;
+        //    Account.Balance -= Amount;
 
-            int NewTransactionId = await _AddTransactionAsync(TransactionType.Withdrawal, Account.Id);
+        //    int NewTransactionId = await _AddTransactionAsync(TransactionType.Withdrawal, Account.Id);
 
-            await _AddEntryAsync(EntryType.Out, NewTransactionId, Account.Id);
+        //    await _AddEntryAsync(EntryType.Out, NewTransactionId, Account.Id);
 
-            return NewTransactionId;
-        }
+        //    return NewTransactionId;
+        //}
 
-        private async Task<int?> _TransferHelper(Account FromAccount, Account ToAccount, decimal Amount)
-        {
-            if (Amount < FromAccount.Balance || Amount < 0)
-                return null;
+        //private async Task<int?> _TransferHelper(Account FromAccount, Account ToAccount, decimal Amount)
+        //{
+        //    if (Amount < FromAccount.Balance || Amount < 0)
+        //        return null;
             
-            FromAccount.Balance -= Amount;
-            ToAccount.Balance += Amount;
+        //    FromAccount.Balance -= Amount;
+        //    ToAccount.Balance += Amount;
 
-            int NewTransactionId = await _AddTransactionAsync(TransactionType.Transfer, Amount);
-            await _AddEntryAsync(EntryType.Out, NewTransactionId, FromAccount.Id);
-            await _AddEntryAsync(EntryType.In, NewTransactionId, ToAccount.Id);
+        //    int NewTransactionId = await _AddTransactionAsync(TransactionType.Transfer, Amount);
+        //    await _AddEntryAsync(EntryType.Out, NewTransactionId, FromAccount.Id);
+        //    await _AddEntryAsync(EntryType.In, NewTransactionId, ToAccount.Id);
 
-            return NewTransactionId;
+        //    return NewTransactionId;
 
-        }
+        //}
 
-        //TODO: we should replace this func with the one exists in AccountRepo
-        private async Task<Account?> _GetAccountAsync(string AccountNumber)
-        {
-            var Account = await _Context.Set<Account>().SingleOrDefaultAsync(x => x.Number == AccountNumber);
+        ////TODO: we should replace this func with the one exists in AccountRepo
+        //private async Task<Account?> _GetAccountAsync(string AccountNumber)
+        //{
+        //    var Account = await _Context.Set<Account>().SingleOrDefaultAsync(x => x.Number == AccountNumber);
 
-            return Account;
-        }
+        //    return Account;
+        //}
 
 
     }

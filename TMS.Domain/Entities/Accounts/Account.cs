@@ -5,15 +5,14 @@ using TMS.Domain.Entities.TransactionEntries;
 
 namespace TMS.Domain.Entities.Accounts
 {
-    public class Account : AuditableEntity
+    public class Account : BaseEntity
     {
         public string Number { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public decimal Balance { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-        // TODO: الأفضل أن تضاف
         public int PersonId { get; set; }
         public virtual Person Person { get; set; } = null!;
 

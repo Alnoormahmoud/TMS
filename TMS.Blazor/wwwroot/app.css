@@ -1,9 +1,42 @@
-html, body {
+html,
+body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-a, .btn-link {
+a,
+.btn-link {
     color: #006bb7;
+}
+
+/* الكلاسات الأساسية */
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    /* text-slate-400 */
+    padding: 0.5rem;
+    transition: all 0.2s;
+}
+
+/* التنسيق عند النشاط (Active State) */
+.nav-item.active {
+    background-color: #2563eb;
+    /* bg-blue-600 */
+    color: white !important;
+    border-radius: 1rem;
+    /* rounded-2xl */
+    transform: translateY(-0.5rem) scale(1.1);
+    /* -translate-y-2 scale-110 */
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+    /* shadow-blue-500/30 */
+}
+
+/* تأكيد لون النص والأيقونة للأبيض عند النشاط */
+.nav-item.active .material-symbols-outlined,
+.nav-item.active span {
+    color: white;
 }
 
 .btn-primary {
@@ -12,8 +45,29 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+/* عندما يكون الرابط نشطاً، طبق هذه التنسيقات */
+nav a.active {
+    background-color: #eff6ff;
+    /* تعادل bg-blue-50 */
+    color: #2563eb;
+    /* لون أزرق للخط مثلاً */
+    border-right: 3px solid #2563eb;
+    /* اختياري: خط جانبي للتحديد */
+}
+
+/* إذا كنت تستخدم Dark Mode */
+.dark nav a.active {
+    background-color: #1e293b;
+    /* تعادل bg-slate-800 */
+    color: #38bdf8;
 }
 
 .content {
@@ -42,9 +96,9 @@ h1:focus {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;

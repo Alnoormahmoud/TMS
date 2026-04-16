@@ -16,11 +16,12 @@ namespace TMS.Application.Interfaces.Transactions
 
         public Task<IEnumerable<Transaction>> GetAllAsync();
 
-        public Task<int?> DepositAsync(DepositDTO dto);
+        public Task<int> AddAsync(TransactionType Type, decimal Amount);
+        //public Task<int?> DepositAsync(DepositWithdrawDTO dto);
 
-        public Task<int?> WithdrawAsync(WithdrawDTO dto);
+        //public Task<int?> WithdrawAsync(DepositWithdrawDTO dto);
 
-        public Task<int?> TransferAsync(TransferDTO dto);
+        //public Task<int?> TransferAsync(TransferDTO dto);
 
     }
 }

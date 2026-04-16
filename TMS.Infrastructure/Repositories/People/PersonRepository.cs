@@ -17,32 +17,45 @@ namespace TMS.Infrastructure.Repositories.People
 
         public async Task<int> AddAsync(Person person)
         {
-            await _context.People.AddAsync(person);
-            await _context.SaveChangesAsync();
+            if (person is null) return -1;
+
+            await _context.People
+                .AddAsync(person);
+
+            await _context
+                .SaveChangesAsync();
 
             return person.Id;
         }
 
         public async Task<bool> UpdateAsync(Person person)
         {
-            _context.People.Update(person);
-            return await _context.SaveChangesAsync() > 0;
+            _context.People
+                .Update(person);
+
+            return await _context
+                .SaveChangesAsync() > 0;
         }
 
         public async Task<bool> DeleteAsync(Person person)
         {
-            _context.People.Remove(person);
-            return await _context.SaveChangesAsync() > 0;
+            _context.People
+                .Remove(person);
+
+            return await _context
+                .SaveChangesAsync() > 0;
         }
 
         public async Task<Person?> GetByIdAsync(int id)
         {
-            return await _context.People.FindAsync(id);
+            return await _context.People
+                .FindAsync(id);
         }
 
         public async Task<IEnumerable<Person>> GetAllAsync()
         {
-            return await _context.People.ToListAsync();
+            return await _context.People
+                .ToListAsync();
         }
 
     }

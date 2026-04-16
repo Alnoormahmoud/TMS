@@ -1,6 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudio,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,windows
 
+
+### blazor ###
+# blazor node.js files
+node_modules/
+npm-debug.log*
+
+# .vs code
+.vscode/
+
 ### Windows ###
 # Windows thumbnail cache files
 Thumbs.db
