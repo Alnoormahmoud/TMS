@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
+
     <Folder Include="DTOs\Accounts\" />
     <Folder Include="DTOs\Users\" />
     <Folder Include="Interfaces\Accounts\" />
     <Folder Include="Interfaces\Users\" />
     <Folder Include="Services\Accounts\" />
     <Folder Include="Services\Users\" />
-=======
+
     <Folder Include="DTOs\TransactionEntries\" />
     <Folder Include="DTOs\Transactions\" />
     <Folder Include="Interfaces\Accounts\" />
@@ -27,7 +27,7 @@
     <Folder Include="Interfaces\Users\" />
     <Folder Include="Services\TransactionEntries\" />
     <Folder Include="Services\Transactions\" />
->>>>>>> upstream/main
+
     <Folder Include="Validators\Accounts\" />
     <Folder Include="Validators\Users\" />
     <Folder Include="Validators\Transactions\" />
