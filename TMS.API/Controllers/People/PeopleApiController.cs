@@ -2,7 +2,7 @@
 using TMS.Application.DTOs.People;
 using TMS.Application.Interfaces.People;
 
-namespace TMS.API.Controllers
+namespace TMS.API.Controllers.People
 {
     [Route("api/PeopleApi")]
     [ApiController]
@@ -54,7 +54,7 @@ namespace TMS.API.Controllers
                 : Problem("حدثت مشكلة عند الإتصال بالخادك");
         }
 
-        [HttpDelete("DeletePerson")]
+        [HttpDelete("DeletePerson/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -72,7 +72,7 @@ namespace TMS.API.Controllers
                 : Problem("حدثت مشكلة عند الإتصال بالخادك");
         }
 
-        [HttpGet("GetPersonById", Name = "GetPersonById")]
+        [HttpGet("GetPersonById/{id}", Name = "GetPersonById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
