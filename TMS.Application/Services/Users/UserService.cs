@@ -9,9 +9,9 @@ using TMS.Domain.Entities.Users;
 
 namespace TMS.Application.Services.Users
 {
-    public class UserService : IUserService 
+    public class UserService : IUserService
     {
-        private readonly IUserRepository  _repo;
+        private readonly IUserRepository _repo;
 
         public UserService(IUserRepository repo)
         {
@@ -33,7 +33,7 @@ namespace TMS.Application.Services.Users
                 CreatedAt = DateTime.Now,
 
                 Person = null!, // will be set by EF Core when we save changes, we just need to set the foreign key (PersonId)             
-             
+
                 CreatedByUser = null! // will be set by EF Core when we save changes, we just need to set the foreign key (CreatedByUserId)
 
 
@@ -51,7 +51,7 @@ namespace TMS.Application.Services.Users
                 return false;
             }
             user.UserName = dto.UserName;
-            user.Password = dto.Password; 
+            user.Password = dto.Password;
 
             return await _repo.UpdateAsync(user);
         }
@@ -82,7 +82,7 @@ namespace TMS.Application.Services.Users
             return new UserDTO
             {
                 Id = user.Id,
-                UserName = user.UserName,               
+                UserName = user.UserName,
                 CreatedByUserId = user.CreatedByUserId,
                 CreatedByUserName = user.CreatedByUser.UserName,
                 PersonId = user.PersonId,
@@ -91,5 +91,23 @@ namespace TMS.Application.Services.Users
             };
         }
 
+        public async Task<bool> ChangePasswordAsync(int id, string oldPassword, string newPassword, string confirmPassword)
+        {
+            if (newPassword != confirmPassword) return false;
+
+            var user = await _repo.GetByIdAsync(id);
+
+            if (user is null) return false;
+            if (user.Password != oldPassword) return false;
+
+            return await _repo.ChangePasswordAsync(user, newPassword);
+        }
+
+        public async Task<UserDTO?> LogInAsync(UserToLogInDTO loginDto)
+        {
+            var user = await _repo.LogInAsync(loginDto);          
+
+            return user is null ? null : MapToDTO(user);
+        }
     }
 }

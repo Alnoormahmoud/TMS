@@ -13,7 +13,6 @@
     <Folder Include="Interfaces\TransactionEntries\" />
     <Folder Include="Interfaces\Transactions\" />
     <Folder Include="Services\Accounts\" />
-    <Folder Include="DTOs\Users\" />
     <Folder Include="Interfaces\TransactionEntries\" />
     <Folder Include="Interfaces\Transactions\" />
     <Folder Include="Interfaces\Users\" />

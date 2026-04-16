@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.Application.DTOs.Users;
 using TMS.Application.Interfaces.Users;
+using TMS.Domain.Entities.Accounts;
 using TMS.Domain.Entities.People;
 using TMS.Domain.Entities.Users;
 using TMS.Infrastructure.Persistence;
@@ -56,5 +58,33 @@ namespace TMS.Infrastructure.Repositories.Users
                 .ToListAsync();
         }
 
+       public async Task<bool> ChangePasswordAsync(User user, string newPassword)
+        {
+
+            if (user is null) return false;
+
+
+            user.Password = newPassword;
+
+
+            _context.Users.Update(user);
+
+            return await _context.SaveChangesAsync() > 0;
+        }
+
+        public async Task<User?> LogInAsync(UserToLogInDTO loginDto)
+        {
+             var user = await _context.Users
+                .Include(u => u.Person) // تأكد من جلب بيانات الشخص
+                .Include(u => u.CreatedByUser) // تأكد من جلب بيانات المستخدم الذي أنشأ هذا المستخدم
+                .FirstOrDefaultAsync(u => u.UserName == loginDto.UserName);
+
+            if (user == null) return null;
+
+            // هنا يجب إضافة كود التحقق من كلمة المرور (Verify Password)
+            // ...
+
+            return user;
+        }
     }
 }

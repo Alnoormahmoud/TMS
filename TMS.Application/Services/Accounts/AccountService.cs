@@ -35,7 +35,7 @@ namespace TMS.Application.Services.Accounts
                 Balance = 1,
                 IsActive = true,
                 CreatedAt = DateTime.Now,
-                CreatedByUserId = null
+               // CreatedByUserId = null
             };
 
             return await _repo
