@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TMS.Application.DTOs.TransactionEntries;
 using TMS.Application.Interfaces.TransactionEntries;
+using TMS.Application.Services.Transactions;
 using TMS.Domain.Entities.TransactionEntries;
 using TMS.Domain.Enums.Transactions;
 
@@ -20,10 +21,11 @@ namespace TMS.Application.Services.TransactionEntries
      
         public async Task<IEnumerable<TransactionEntryDTO>> GetAllAsync(TransactionEntriesFilterDTO dto)
         {
-            var Entries = await _repo.GetAllAsync(dto);
-            return MapToDTOs(Entries);
-          
+
+           var Entries = await _repo.GetAllAsync(dto);
+           return MapToDTOs(Entries);
         }
+
 
         public async Task<TransactionEntryDTO?> GetByIdAsync(int Id)
         {
