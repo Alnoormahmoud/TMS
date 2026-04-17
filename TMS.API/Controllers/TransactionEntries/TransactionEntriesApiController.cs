@@ -48,6 +48,5 @@ namespace TMS.API.Controllers.TransactionEntries
             return Ok(result);
 
         }
-
     }
 }
