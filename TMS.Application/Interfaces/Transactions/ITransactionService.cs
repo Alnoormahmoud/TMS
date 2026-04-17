@@ -12,9 +12,9 @@ namespace TMS.Application.Interfaces.Transactions
         public Task<IEnumerable<TransactionDTO>> GetAllAsync();
         public Task<TransactionDTO?> GetByIdAsync(int Id);
 
-        public Task<int?> WithdrawAsync(WithdrawDTO dto);
+        public Task<int?> WithdrawAsync(DepositWithdrawDTO dto);
 
-        public Task<int?> DepositAsync(DepositDTO dto);
+        public Task<int?> DepositAsync(DepositWithdrawDTO dto);
 
         public Task<int?> TransferAsync(TransferDTO dto);
     }

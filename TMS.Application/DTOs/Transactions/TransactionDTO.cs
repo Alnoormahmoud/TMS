@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TMS.Application.DTOs.TransactionEntries;
 using TMS.Domain.Entities.TransactionEntries;
 using TMS.Domain.Enums.Transactions;
 
@@ -15,6 +16,6 @@ namespace TMS.Application.DTOs.Transactions
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
 
-        public ICollection<TransactionEntry> Entries { get; set; } = new List<TransactionEntry>();
+        public IEnumerable<TransactionEntryDTO> Entries { get; set; } = new List<TransactionEntryDTO>();
     }
 }

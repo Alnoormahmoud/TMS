@@ -14,10 +14,6 @@ namespace TMS.Application.Interfaces.TransactionEntries
     {
         public Task<TransactionEntryDTO?> GetByIdAsync(int Id);
 
-        public Task<IEnumerable<TransactionEntryDTO>> GetAllAsync();
-
-        public Task<IEnumerable<TransactionEntryDTO>> GetAllByAccountIdAsync(int AccountId);
-
-        public Task<IEnumerable<TransactionEntryDTO>> GetAllFilteredAsync(TransactionEntriesFilterDTO dto);
+        public Task<IEnumerable<TransactionEntryDTO>> GetAllAsync(TransactionEntriesFilterDTO dto);
     }
 }

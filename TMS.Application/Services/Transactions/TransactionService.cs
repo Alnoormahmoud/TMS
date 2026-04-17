@@ -4,8 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using TMS.Application.DTOs.Accounts;
+using TMS.Application.DTOs.TransactionEntries;
 using TMS.Application.DTOs.Transactions;
+using TMS.Application.Interfaces.Accounts;
+using TMS.Application.Interfaces.TransactionEntries;
 using TMS.Application.Interfaces.Transactions;
+using TMS.Application.Services.Accounts;
+using TMS.Application.Services.TransactionEntries;
 using TMS.Domain.Entities.Accounts;
 using TMS.Domain.Entities.Transactions;
 using TMS.Domain.Enums.TransactionEntries;
@@ -15,17 +21,24 @@ namespace TMS.Application.Services.Transactions
 {
     public class TransactionService : ITransactionService
     {
-        private readonly ITransactionRepository _repo;
-        public TransactionService(ITransactionRepository repo)
+        private readonly ITransactionRepository _TransactionRepo;
+
+        private readonly ITransactionEntryRepository _EntryRepo;
+
+        private readonly IAccountService _AccountService;
+        public TransactionService(ITransactionRepository TransactionRepo, ITransactionEntryRepository EntryRepo
+            , IAccountService AccountService )
         {
-            _repo = repo;
+            _TransactionRepo = TransactionRepo;
+            _EntryRepo = EntryRepo;
+            _AccountService = AccountService;
         }
 
        
         public async Task<IEnumerable<TransactionDTO>> GetAllAsync()
         {
             List<TransactionDTO> DTOList = new List<TransactionDTO>();
-            var transactions = await _repo.GetAllAsync();
+            var transactions = await _TransactionRepo.GetAllAsync();
 
             foreach (var transaction in transactions)
             {
@@ -37,7 +50,7 @@ namespace TMS.Application.Services.Transactions
 
         public async Task<TransactionDTO?> GetByIdAsync(int Id)
         {
-            var transaction = await _repo.GetByIdAsync(Id);
+            var transaction = await _TransactionRepo.GetByIdAsync(Id);
             return transaction is null
                 ? null : MapToDTO(transaction);
         }
@@ -46,167 +59,176 @@ namespace TMS.Application.Services.Transactions
         public async Task<int?> TransferAsync(TransferDTO dto)
         {
 
-            using var transaction = await _Context.Database.BeginTransactionAsync();
             int? NewTransactionId = null;
-            try
+
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var FromAccount = await _GetAccountAsync(dto.FromAccountNumber);
-                if (FromAccount is null)
+                try
                 {
-                    await transaction.RollbackAsync();
-                    return null;// Error invalid FromAccountNumber
-                }
 
-                var ToAccount = await _GetAccountAsync(dto.ToAccountNumber);
-                if (ToAccount is null)
+                    var FromAccountDTO = await _AccountService.GetByNumberAsync(dto.FromAccountNumber);
+                    if (FromAccountDTO is null)
+                    {
+                        return null;// Error invalid accountNumber
+                    }
+
+                    var ToAccountDTO = await _AccountService.GetByNumberAsync(dto.ToAccountNumber);
+                    if (ToAccountDTO is null)
+                    {
+                        return null;// Error invalid accountNumber
+                    }
+
+
+                    NewTransactionId = await _TransferHelper(FromAccountDTO, ToAccountDTO, dto.Amount);
+
+
+                    transaction.Complete();
+
+                }
+                catch (Exception)
                 {
-                    await transaction.RollbackAsync();
-                    return null;// Error invalid ToAccountNumber
+                    return null;
                 }
-
-
-                NewTransactionId = await _TransferHelper(FromAccount, ToAccount, dto.Amount);
-
-
-                await _Context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
             }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                return null;
-            }
+
+           
 
             return NewTransactionId;
         }
 
         public async Task<int?> WithdrawAsync(DepositWithdrawDTO dto)
         {
-            using var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             int? NewTransactionId = null;
-            try
+
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-
-                var Account = await _GetAccountAsync(dto.AccountNumber);
-                if (Account is null)
+                try
                 {
-                    return null;// Error invalid accountNumber
-                }
 
-                NewTransactionId = await _WithdrawalHelperAsync(Account, dto.Amount);
-                if (NewTransactionId is null)
+                    var AccountDTO = await _AccountService.GetByNumberAsync(dto.AccountNumber);
+                    if (AccountDTO is null)
+                    {
+                        return null;// Error invalid accountNumber
+                    }
+
+                    NewTransactionId = await _WithdrawHelperAsync(AccountDTO, dto.Amount);
+                    if (NewTransactionId is null)
+                    {
+                        return null;// Error insufficient Balance or Amount < 0
+                    }
+
+
+                    transaction.Complete();
+
+                }
+                catch (Exception)
                 {
-                    return null;// Error insufficient Balance or Amount < 0
+                    return null;
                 }
-
-
-                transaction.Complete();
-
             }
-            catch (Exception)
-            {
-                return null;
-            }
-
+                
             return NewTransactionId;
         }
 
         public async Task<int?> DepositAsync(DepositWithdrawDTO dto)
         {
-            using var transaction = await _Context.Database.BeginTransactionAsync();
             int? NewTransactionId = null;
 
-            try
+            using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                var Account = await _GetAccountAsync(dto.AccountNumber);
-                if (Account is null)
+                try
                 {
-                    await transaction.RollbackAsync();
+
+                    var AccountDTO = await _AccountService.GetByNumberAsync(dto.AccountNumber);
+                    if (AccountDTO is null)
+                    {
+                        return null;// Error invalid accountNumber
+                    }
+
+                    NewTransactionId = await _DepositHelperAsync(AccountDTO, dto.Amount);
+
+                    if (NewTransactionId is null)
+                    {
+                        return null;// Error Amount < 0
+                    }
+                    transaction.Complete();
+
+                }
+                catch (Exception)
+                {
                     return null;
                 }
-
-                NewTransactionId = await _DepositHelperAsync(Account, dto.Amount);
-                if (NewTransactionId is null)
-                {
-                    await transaction.RollbackAsync();
-                    return null;// Error Amount < 0
-                }
-
-                await _Context.SaveChangesAsync();
-                await transaction.CommitAsync();
             }
-            catch (Exception)
-            {
-                await transaction.RollbackAsync();
-                return null;
-            }
+
+           
 
             return NewTransactionId;
         }
 
 
-        private async Task<int?> _DepositHelperAsync(Account Account, decimal Amount)
+        private async Task<int?> _DepositHelperAsync(AccountDTO Account, decimal Amount)
         {
             if (Amount < 0)
                 return null;
 
             Account.Balance += Amount;
+            //TODO: update Balance
+            //await _AccountService.UpdateAsync()
 
-            int NewTransactionId = await _AddTransactionAsync(TransactionType.Deposit, Amount);
+            int NewTransactionId = await _TransactionRepo.AddAsync(TransactionType.Deposit, Amount);
 
-            await _AddEntryAsync(EntryType.In, NewTransactionId, Account.Id);
+            await _EntryRepo.AddEntryAsync(EntryType.In, NewTransactionId, Account.Id);
 
             return NewTransactionId;
         }
 
-        private async Task<int?> _WithdrawalHelperAsync(Account Account, decimal Amount)
+        private async Task<int?> _WithdrawHelperAsync(AccountDTO Account, decimal Amount)
         {
             if (Account.Balance < Amount || Amount < 0)
                 return null;
 
             Account.Balance -= Amount;
+            //TODO: update Balance
+           //await _AccountService.UpdateAsync()
 
-            int NewTransactionId = await _AddTransactionAsync(TransactionType.Withdrawal, Account.Id);
+            int NewTransactionId = await _TransactionRepo.AddAsync(TransactionType.Withdrawal, Amount);
 
-            await _AddEntryAsync(EntryType.Out, NewTransactionId, Account.Id);
+            await _EntryRepo.AddEntryAsync(EntryType.Out, NewTransactionId, Account.Id);
 
             return NewTransactionId;
         }
 
-        private async Task<int?> _TransferHelper(Account FromAccount, Account ToAccount, decimal Amount)
+        private async Task<int?> _TransferHelper(AccountDTO FromAccount, AccountDTO ToAccount, decimal Amount)
         {
-            if (Amount < FromAccount.Balance || Amount < 0)
+            if (Amount > FromAccount.Balance || Amount < 0)
                 return null;
 
             FromAccount.Balance -= Amount;
+            //TODO: update Balance
+            //await _AccountService.UpdateAsync()
             ToAccount.Balance += Amount;
+            //TODO: update Balance
+            //await _AccountService.UpdateAsync()
 
-            int NewTransactionId = await _AddTransactionAsync(TransactionType.Transfer, Amount);
-            await _AddEntryAsync(EntryType.Out, NewTransactionId, FromAccount.Id);
-            await _AddEntryAsync(EntryType.In, NewTransactionId, ToAccount.Id);
+            int NewTransactionId = await _TransactionRepo.AddAsync(TransactionType.Transfer, Amount);
+            await _EntryRepo.AddEntryAsync(EntryType.Out, NewTransactionId, FromAccount.Id);
+            await _EntryRepo.AddEntryAsync(EntryType.In, NewTransactionId, ToAccount.Id);
 
             return NewTransactionId;
 
         }
 
-        //TODO: we should replace this func with the one exists in AccountRepo
-        private async Task<Account?> _GetAccountAsync(string AccountNumber)
+      
+        public static TransactionDTO MapToDTO(Domain.Entities.Transactions.Transaction transaction)
         {
-            var Account = await _Context.Set<Account>().SingleOrDefaultAsync(x => x.Number == AccountNumber);
 
-            return Account;
-        }
-
-        public static TransactionDTO MapToDTO(Transaction transaction)
-        {
             return new TransactionDTO()
             {
                 Id = transaction.Id,
                 Amount = transaction.Amount,
                 Date = transaction.Date,
                 Type = transaction.Type,
-                Entries = transaction.Entries
+                Entries = TransactionEntryService.MapToDTOs(transaction.Entries.AsEnumerable())
             };
         }
     }

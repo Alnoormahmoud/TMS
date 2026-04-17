@@ -5,7 +5,7 @@ using TMS.Application.DTOs.Transactions;
 using TMS.Application.Interfaces.TransactionEntries;
 using TMS.Application.Interfaces.Transactions;
 
-namespace TMS.API.Controllers
+namespace TMS.API.Controllers.TransactionEntries
 {
     [Route("api/TransactionEntriesApi")]
     [ApiController]
@@ -36,35 +36,14 @@ namespace TMS.API.Controllers
                  : Ok(TransactionDTO);
 
         }
+      
 
-        [HttpGet("GetAll")]
+        [HttpGet("GetAll", Name = "GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<TransactionEntryDTO>>> GetAllTransactionsEntries()
+        public async Task<ActionResult<IEnumerable<TransactionEntryDTO>>> GetAll([FromQuery]TransactionEntriesFilterDTO dto)
         {
 
-            var result = await _EntryService.GetAllAsync();
-
-            return Ok(result);
-
-        }
-
-        [HttpGet("GetAllByAccountId", Name = "GetTransactionEntryByAccountId")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<TransactionEntryDTO>>> GetAllByAccountId(int AccountId)
-        {
-
-            var result = await _EntryService.GetAllByAccountIdAsync(AccountId);
-
-            return Ok(result);
-
-        }
-
-        [HttpGet("GetAllFiltered", Name = "GetTransactionEntryByAccountId")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<TransactionEntryDTO>>> GetAllFiltered(TransactionEntriesFilterDTO dto)
-        {
-
-            var result = await _EntryService.GetAllFilteredAsync(dto);
+            var result = await _EntryService.GetAllAsync(dto);
 
             return Ok(result);
 

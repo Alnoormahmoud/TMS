@@ -17,41 +17,12 @@ namespace TMS.Application.Services.TransactionEntries
         {
             _repo = repo;
         }
-        public async Task<IEnumerable<TransactionEntryDTO>> GetAllAsync()
+     
+        public async Task<IEnumerable<TransactionEntryDTO>> GetAllAsync(TransactionEntriesFilterDTO dto)
         {
-
-           var Entries = await _repo.GetAllAsync();
-            List<TransactionEntryDTO> DTOList = new List<TransactionEntryDTO>();
-
-            foreach (var Entry in Entries)
-            {
-                DTOList.Add(_MapToDTO(Entry));
-            }
-            return DTOList;
-        }
-
-        public async Task<IEnumerable<TransactionEntryDTO>> GetAllFilteredAsync(TransactionEntriesFilterDTO dto)
-        {
-            var Entries = await _repo.GetAllFilteredAsync(dto);
-            List<TransactionEntryDTO> DTOList = new List<TransactionEntryDTO>();
-
-            foreach (var Entry in Entries)
-            {
-                DTOList.Add(_MapToDTO(Entry));
-            }
-            return DTOList;
-        }
-
-        public async Task<IEnumerable<TransactionEntryDTO>> GetAllByAccountIdAsync(int AccountId)
-        {
-            var Entries = await _repo.GetAllByAccountIdAsync(AccountId);
-            List<TransactionEntryDTO> DTOList = new List<TransactionEntryDTO>();
-
-            foreach (var Entry in Entries)
-            {
-                DTOList.Add(_MapToDTO(Entry));
-            }
-            return DTOList;
+            var Entries = await _repo.GetAllAsync(dto);
+            return MapToDTOs(Entries);
+          
         }
 
         public async Task<TransactionEntryDTO?> GetByIdAsync(int Id)
@@ -63,15 +34,28 @@ namespace TMS.Application.Services.TransactionEntries
                 :_MapToDTO(Entry);
         }
 
-        private TransactionEntryDTO _MapToDTO(TransactionEntry Entry)
+        private static TransactionEntryDTO _MapToDTO(TransactionEntry Entry)
         {
             return new TransactionEntryDTO()
             {
                 Id = Entry.Id,
-                AccountID = Entry.AccountId,
+                AccountNumber = Entry.Account.Number,
                 TransactionID = Entry.TransactionId,
+                Amount = Entry.Transaction.Amount,
                 EntryType = Entry.EntryType
             };
+
+        }
+
+        public static IEnumerable<TransactionEntryDTO> MapToDTOs(IEnumerable<TransactionEntry> Entries)
+        {
+            List<TransactionEntryDTO> DTOList = new List<TransactionEntryDTO>();
+
+            foreach (var Entry in Entries)
+            {
+                DTOList.Add(_MapToDTO(Entry));
+            }
+            return DTOList;
 
         }
     }

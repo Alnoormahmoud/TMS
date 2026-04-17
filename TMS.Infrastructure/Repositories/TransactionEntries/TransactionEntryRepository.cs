@@ -22,27 +22,35 @@ namespace TMS.Infrastructure.Repositories.TransactionEntries
             _Context = Context;
         }
 
-
-        public async Task<IEnumerable<TransactionEntry>> GetAllAsync()
+        public async Task<IEnumerable<TransactionEntry>> GetAllAsync(TransactionEntriesFilterDTO dto)
         {
-            return await _Context.TransactionEntries.ToListAsync();
-        }
+            var Query = _Context.TransactionEntries.Where((x) => true);
 
-        public async Task<IEnumerable<TransactionEntry>> GetAllFilteredAsync(TransactionEntriesFilterDTO dto)
-        {
-            if (dto.TransactionType.HasValue)
+            if (dto.AccountNumber != null)
             {
-                return await _Context.TransactionEntries.Where(x => (x.AccountId == dto.AccountId) && (x.Transaction.Type == dto.TransactionType)).ToListAsync();
+                Query = Query
+                    .Where(x => (x.Account.Number == dto.AccountNumber));
             }
 
-            return await _Context.TransactionEntries.Where(x => (x.AccountId == dto.AccountId)).ToListAsync();
-          
+            if (dto.TransactionType.HasValue)
+            {
+                Query = Query
+                    .Where(x => (x.Transaction.Type == dto.TransactionType));
+            }
+
+            return await Query
+                .Include(x=>x.Transaction)
+                .Include(x=>x.Account)
+                .ToListAsync();
 
         }
 
         public async Task<TransactionEntry?> GetByIdAsync(int Id)
         {
-            return await _Context.TransactionEntries.FindAsync(Id);
+            return await _Context.TransactionEntries
+                .Include(x=>x.Account)
+                .Include(x=>x.Transaction)
+                .FirstOrDefaultAsync(x=>x.Id == Id);
         }
 
         public async Task<int> AddEntryAsync(EntryType Type, int TransactionId, int AccountId)
@@ -54,6 +62,8 @@ namespace TMS.Infrastructure.Repositories.TransactionEntries
                 AccountId = AccountId
             };
             await _Context.TransactionEntries.AddAsync(NewEntry);
+
+            _Context.SaveChanges();
 
             return NewEntry.Id;
         }
