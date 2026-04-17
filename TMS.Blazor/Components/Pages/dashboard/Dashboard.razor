@@ -2,11 +2,13 @@
 @page "/"
 @rendermode InteractiveServer
 
+<!DOCTYPE html>
+
+<html class="light" dir="rtl" lang="ar"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Digital Private Bank - Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<title>البنك الرقمي الخاص - لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Noto+Sans+Arabic:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script id="tailwind-config">
@@ -70,9 +72,9 @@
                         "full": "0.75rem"
                     },
                     "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
+                        "headline": ["Noto Sans Arabic", "Manrope"],
+                        "body": ["Noto Sans Arabic", "Inter"],
+                        "label": ["Noto Sans Arabic", "Inter"]
                     }
                 },
             },
@@ -85,36 +87,55 @@
         .no-border-tonal-shift { border: none !important; }
         .tonal-layering { border: none !important; }
         .flat-no-shadows { box-shadow: none !important; }
-        body { font-family: 'Inter', sans-serif; }
-        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        body { font-family: 'Noto Sans Arabic', 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Noto Sans Arabic', 'Manrope', sans-serif; }
     </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-fixed-dim">
 
-
-<div class="flex pt-20">
- 
 <!-- Main Content Canvas -->
-<main class="flex-1 md:ml-64 px-6 py-8 max-w-5xl w-full pb-32">
-<WealthCardcomp></WealthCardcomp>
+<main class="flex-1 md:mr-64 px-6 py-8 max-w-5xl mx-auto w-full pb-32">
+<!-- Wealth Card Section -->
+<section class="mb-12">
+<div class="relative overflow-hidden bg-primary rounded-[2rem] p-8 md:p-12 text-white shadow-2xl shadow-blue-900/20">
+<div class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-20 -mt-20 blur-3xl"></div>
+<div class="absolute bottom-0 right-0 w-48 h-48 bg-primary-container/20 rounded-full -mr-10 -mb-10 blur-2xl"></div>
+<div class="relative z-10">
+<p class="text-primary-fixed-dim font-medium mb-2 tracking-wide uppercase text-xs">الرصيد الحالي</p>
+<h2 class="text-5xl md:text-6xl font-headline font-extrabold mb-8 tracking-tight" dir="ltr">$42,950.00</h2>
+<div class="flex flex-wrap gap-4">
+<NavLink href="/send" class="flex items-center gap-2 bg-white text-primary px-8 py-4 rounded-xl font-headline font-bold hover:bg-surface-container-lowest transition-all active:scale-95 shadow-lg">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+                            إرسال
+                        </NavLink>
+<NavLink href="/receive" class="flex items-center gap-2 bg-white/10 backdrop-blur-md text-white border border-white/20 px-8 py-4 rounded-xl font-headline font-bold hover:bg-white/20 transition-all active:scale-95" >
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+                            استلام
+                        </NavLink>
+</div>
+</div>
+</div>
+</section>
 
 
 <!-- Transactions Section -->
 <section>
 <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-<h3 class="font-headline font-bold text-2xl text-on-surface">Previous Transactions</h3>
+<h3 class="font-headline font-bold text-2xl text-on-surface">المعاملات السابقة</h3>
 <!-- Filters -->
 <div class="flex flex-wrap gap-2">
 <button class="bg-surface-container-low px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
-                            Date: Last 30 Days
-                        </button>
+                        التاريخ: آخر 30 يوم
+                    </button>
 <button class="bg-surface-container-low px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
-                            Type: All
-                        </button>
-<button @onclick="handleclick" class="bg-surface-container-low px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
-                            Amount: $0 - $10k
-                        </button>
+                        النوع: الكل
+                    </button>
+<button class="bg-surface-container-low px-4 py-2 rounded-full text-xs font-semibold text-on-surface-variant border border-outline-variant/10 hover:bg-surface-container-high transition-colors">
+                        المبلغ: $0 - $10k
+                    </button>
 </div>
 </div>
-<!-- Transaction List (No borders, tonal separation) -->
+<!-- Transaction List -->
 <div class="space-y-4">
 <!-- Transaction Item -->
 <div class="group flex items-center justify-between p-4 bg-surface-container-lowest rounded-xl hover:bg-surface-container-low transition-all duration-300">
@@ -123,13 +144,13 @@
 <span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
 </div>
 <div>
-<p class="font-headline font-bold text-on-surface">Apple Store Soho</p>
-<p class="text-xs text-on-surface-variant">Technology • Oct 24, 2023</p>
+<p class="font-headline font-bold text-on-surface">متجر آبل سوهو</p>
+<p class="text-xs text-on-surface-variant">تكنولوجيا • 24 أكتوبر 2023</p>
 </div>
 </div>
-<div class="text-right">
+<div class="text-left" dir="ltr">
 <p class="font-headline font-bold text-on-surface">- $1,299.00</p>
-<p class="text-[10px] uppercase font-bold text-slate-400">Completed</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 text-right">مكتمل</p>
 </div>
 </div>
 <!-- Transaction Item -->
@@ -139,13 +160,13 @@
 <span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
 </div>
 <div>
-<p class="font-headline font-bold text-on-surface">Internal Transfer</p>
-<p class="text-xs text-on-surface-variant">Savings Account • Oct 22, 2023</p>
+<p class="font-headline font-bold text-on-surface">تحويل داخلي</p>
+<p class="text-xs text-on-surface-variant">حساب توفير • 22 أكتوبر 2023</p>
 </div>
 </div>
-<div class="text-right">
+<div class="text-left" dir="ltr">
 <p class="font-headline font-bold text-primary">+ $5,000.00</p>
-<p class="text-[10px] uppercase font-bold text-slate-400">Completed</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 text-right">مكتمل</p>
 </div>
 </div>
 <!-- Transaction Item -->
@@ -155,13 +176,13 @@
 <span class="material-symbols-outlined" data-icon="restaurant">restaurant</span>
 </div>
 <div>
-<p class="font-headline font-bold text-on-surface">The Gilded Cage</p>
-<p class="text-xs text-on-surface-variant">Dining • Oct 21, 2023</p>
+<p class="font-headline font-bold text-on-surface">ذا جيلدد كيدج</p>
+<p class="text-xs text-on-surface-variant">مطاعم • 21 أكتوبر 2023</p>
 </div>
 </div>
-<div class="text-right">
+<div class="text-left" dir="ltr">
 <p class="font-headline font-bold text-on-surface">- $450.00</p>
-<p class="text-[10px] uppercase font-bold text-slate-400">Completed</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 text-right">مكتمل</p>
 </div>
 </div>
 <!-- Transaction Item -->
@@ -171,29 +192,45 @@
 <span class="material-symbols-outlined" data-icon="flight_takeoff">flight_takeoff</span>
 </div>
 <div>
-<p class="font-headline font-bold text-on-surface">Delta Airlines</p>
-<p class="text-xs text-on-surface-variant">Travel • Oct 18, 2023</p>
+<p class="font-headline font-bold text-on-surface">دلتا ايرلاينز</p>
+<p class="text-xs text-on-surface-variant">سفر • 18 أكتوبر 2023</p>
 </div>
 </div>
-<div class="text-right">
+<div class="text-left" dir="ltr">
 <p class="font-headline font-bold text-on-surface">- $2,180.00</p>
-<p class="text-[10px] uppercase font-bold text-slate-400">Completed</p>
+<p class="text-[10px] uppercase font-bold text-slate-400 text-right">مكتمل</p>
 </div>
 </div>
 </div>
 <div class="mt-8 flex justify-center">
-<button class="text-primary font-bold py-2 px-6 rounded-full hover:bg-primary/5 transition-colors">View All Transactions</button>
+<button class="text-primary font-bold py-2 px-6 rounded-full hover:bg-primary/5 transition-colors">عرض جميع المعاملات</button>
 </div>
 </section>
 </main>
-</div> 
 
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.04)] no-border tonal-layering rounded-t-3xl">
+<a class="flex flex-col items-center justify-center bg-blue-600 text-white rounded-2xl p-2 scale-110 -translate-y-2 shadow-lg shadow-blue-500/30 transition-all" href="/dashboard">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-headline text-[10px] font-medium tracking-wide">الرئيسية</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-blue-500 transition-all active:scale-90 transition-transform duration-200" href="/send">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-headline text-[10px] font-medium tracking-wide">إرسال</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-blue-500 transition-all active:scale-90 transition-transform duration-200" href="/receive">
+<span class="material-symbols-outlined" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span class="font-headline text-[10px] font-medium tracking-wide">استلام</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 p-2 hover:text-blue-500 transition-all active:scale-90 transition-transform duration-200" href="info">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-headline text-[10px] font-medium tracking-wide">الملف الشخصي</span>
+</a>
+</nav>
+</body></html>
 
 
 @code {
 
-    private void handleclick(MouseEventArgs args)
-    {
-        Console.WriteLine("Clicked");
-    }
+   
 }

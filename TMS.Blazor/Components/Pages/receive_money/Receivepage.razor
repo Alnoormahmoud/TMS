@@ -1,15 +1,14 @@
-@page "/receive"
+﻿@page "/receive"
 @rendermode InteractiveServer
 
 <!DOCTYPE html>
 
-<head>
+<html class="light" dir="rtl" lang="ar"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Receive Money - Digital Private Bank</title>
+<title>استلام الأموال - البنك الرقمي الخاص</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=Noto+Sans+Arabic:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -72,9 +71,9 @@
                         "full": "0.75rem"
                     },
                     "fontFamily": {
-                        "headline": ["Manrope"],
-                        "body": ["Inter"],
-                        "label": ["Inter"]
+                        "headline": ["Noto Sans Arabic", "Manrope"],
+                        "body": ["Noto Sans Arabic", "Inter"],
+                        "label": ["Noto Sans Arabic", "Inter"]
                     }
                 },
             },
@@ -90,22 +89,23 @@
         .no-border-tonal-shift {
             border: none !important;
         }
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+        }
     </style>
 </head>
-
-
-<div class="mb-12">
+<body class="bg-surface font-body text-on-surface antialiased">
 
 <!-- Main Content Canvas -->
-<main class="flex-1 md:ml-64 px-6 py-8 max-w-5xl w-full pb-32">
+<main class="flex-1 px-6 md:px-12 py-8 max-w-5xl mx-auto w-full">
 <header class="mb-12">
-<h1 class="font-headline font-extrabold text-4xl tracking-tight text-on-surface mb-2">Receive Assets</h1>
-<p class="text-on-surface-variant font-body">Share your details or show your unique QR code to receive payments instantly.</p>
+<h1 class="font-headline font-extrabold text-4xl tracking-tight text-on-surface mb-2">استلام الأموال</h1>
+<p class="text-on-surface-variant font-body">شارك تفاصيلك أو اعرض رمز QR الفريد الخاص بك لتلقي المدفوعات فوراً.</p>
 </header>
 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
 <!-- QR Code Bento Section -->
 <div class="lg:col-span-5 flex flex-col items-center justify-center p-8 bg-surface-container-lowest rounded-xl shadow-[0_-10px_30px_rgba(0,0,0,0.04)] relative overflow-hidden">
-<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-primary-container"></div>
+<div class="absolute top-0 right-0 w-full h-1 bg-gradient-to-l from-primary to-primary-container"></div>
 <div class="p-6 bg-white rounded-2xl shadow-sm border border-outline-variant/10 mb-8">
 <!-- QR Code Mockup -->
 <div class="w-48 h-48 qr-gradient p-4 rounded-xl flex items-center justify-center">
@@ -120,33 +120,28 @@
 </div>
 </div>
 <div class="text-center space-y-2">
-<h3 class="font-headline font-bold text-xl text-on-surface">Universal QR Code</h3>
-<p class="text-label-md text-on-surface-variant px-4">Works with all SEPA and Swift compatible banking applications.</p>
+<h3 class="font-headline font-bold text-xl text-on-surface">رمز QR العالمي</h3>
+<p class="text-label-md text-on-surface-variant px-4">يعمل مع جميع التطبيقات البنكية المتوافقة مع SEPA و Swift.</p>
 </div>
 <button class="mt-8 flex items-center justify-center gap-2 px-8 py-3 bg-surface-container-high text-on-surface font-semibold rounded-full hover:bg-surface-container-highest transition-all group">
 <span class="material-symbols-outlined text-xl" data-icon="share">share</span>
-                        Share QR Code
-                    </button>
+                    مشاركة رمز QR
+                </button>
 </div>
 <!-- Account Details Bento Section -->
 <div class="lg:col-span-7 flex flex-col gap-6">
-
 <!-- Identity Card -->
 <div class="p-8 bg-primary rounded-xl relative overflow-hidden group">
 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
 <div class="relative z-10 flex justify-between items-start">
 <div class="space-y-1">
-<p class="text-blue-200 font-label text-xs uppercase tracking-widest font-semibold">Primary Account Holder</p>
-<h2 class="text-white font-headline font-bold text-2xl tracking-tight">Alexander J. Sterling</h2>
+<p class="text-blue-200 font-label text-xs uppercase tracking-widest font-semibold">صاحب الحساب الرئيسي</p>
+<h2 class="text-white font-headline font-bold text-2xl tracking-tight">ألكسندر ج. ستيرلينغ</h2>
 </div>
 <span class="material-symbols-outlined text-white/40 text-4xl" data-icon="verified">verified</span>
 </div>
 <div class="relative z-10 mt-12 flex items-end justify-between">
-<div class="text-white">
-<p class="text-blue-200 text-xs font-medium mb-1">Global Membership</p>
-<p class="font-manrope font-bold text-lg">Platinum Elite</p>
-</div>
-<div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20">
+<div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20" dir="ltr">
 <span class="text-white font-bold tracking-tighter">BANK-0042-9910</span>
 </div>
 </div>
@@ -154,18 +149,39 @@
 <!-- Details Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <div class="p-6 bg-surface-container-lowest rounded-xl shadow-[0_-10px_30px_rgba(0,0,0,0.04)] hover:bg-surface-container-low transition-colors">
-<p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">Account Number</p>
-<div class="flex items-center justify-between">
-<span class="font-manrope font-bold text-on-surface">1234 5678 90</span>
+<p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4">رقم الحساب</p>
+<div class="flex items-center justify-between" dir="ltr">
 <button class="text-primary hover:bg-primary/10 p-2 rounded-lg transition-colors">
 <span class="material-symbols-outlined" data-icon="content_copy">content_copy</span>
 </button>
+<span class="font-headline font-bold text-on-surface">1234 5678 90</span>
+</div>
 </div>
 </div>
 
 </div>
 </div>
-</div>
+<!-- Transaction Limits / Tips (Asymmetric Section) -->
+
 </main>
-</div>
 
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-xl shadow-[0_-10px_30px_rgba(0,0,0,0.04)] rounded-t-3xl">
+<NavLink href="/dashboard" class="flex flex-col items-center justify-center text-slate-400 p-2">
+<span class="material-symbols-outlined text-2xl" data-icon="home">home</span>
+<span class="text-[10px] font-inter font-medium tracking-wide">الرئيسية</span>
+</NavLink>
+<NavLink href="/send" class="flex flex-col items-center justify-center text-slate-400 p-2">
+<span class="material-symbols-outlined text-2xl" data-icon="payments">payments</span>
+<span class="text-[10px] font-inter font-medium tracking-wide">إرسال</span>
+</NavLink>
+<NavLink href="/receive" class="flex flex-col items-center justify-center bg-blue-600 text-white rounded-2xl p-3 scale-110 -translate-y-4 shadow-lg shadow-blue-500/30">
+<span class="material-symbols-outlined text-2xl" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span class="text-[10px] font-inter font-medium tracking-wide">استلام</span>
+</NavLink>
+<NavLink href="/info" class="flex flex-col items-center justify-center text-slate-400 p-2">
+<span class="material-symbols-outlined text-2xl" data-icon="account_circle">account_circle</span>
+<span class="text-[10px] font-inter font-medium tracking-wide">الملف</span>
+</NavLink>
+</nav>
+</body></html>

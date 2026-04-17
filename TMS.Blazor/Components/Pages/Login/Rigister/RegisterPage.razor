@@ -1,0 +1,234 @@
+﻿@page "/register"
+@rendermode InteractiveServer
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#191c1e",
+                    "on-error": "#ffffff",
+                    "surface-variant": "#e0e3e5",
+                    "on-primary-fixed": "#001452",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c3c5d9",
+                    "on-primary-fixed-variant": "#0038b6",
+                    "on-secondary-fixed-variant": "#3f465c",
+                    "surface-container-high": "#e6e8ea",
+                    "on-secondary-container": "#5c647a",
+                    "inverse-primary": "#b7c4ff",
+                    "surface-container-low": "#f2f4f6",
+                    "surface-container": "#eceef0",
+                    "outline": "#737688",
+                    "on-secondary-fixed": "#131b2e",
+                    "on-primary-container": "#dfe3ff",
+                    "secondary": "#565e74",
+                    "surface": "#f7f9fb",
+                    "error": "#ba1a1a",
+                    "primary-container": "#0052ff",
+                    "tertiary-container": "#bf3003",
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#004ced",
+                    "surface-bright": "#f7f9fb",
+                    "secondary-container": "#dae2fd",
+                    "on-tertiary-fixed-variant": "#891e00",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed": "#dde1ff",
+                    "surface-dim": "#d8dadc",
+                    "secondary-fixed": "#dae2fd",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#e0e3e5",
+                    "background": "#f7f9fb",
+                    "on-tertiary-fixed": "#3c0800",
+                    "inverse-on-surface": "#eff1f3",
+                    "on-background": "#191c1e",
+                    "primary-fixed-dim": "#b7c4ff",
+                    "tertiary-fixed-dim": "#ffb4a1",
+                    "secondary-fixed-dim": "#bec6e0",
+                    "tertiary": "#952200",
+                    "on-surface-variant": "#434656",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-container": "#ffddd5",
+                    "tertiary-fixed": "#ffdbd2",
+                    "primary": "#003ec7",
+                    "inverse-surface": "#2d3133"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Manrope"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+        h1, h2, h3 {
+            font-family: 'Manrope', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .rtl { direction: rtl; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-[#f7f9fb]/80 dark:bg-slate-950/80 backdrop-blur-xl">
+<div class="flex flex-row-reverse justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<div class="text-2xl font-bold text-[#191c1e] dark:text-white tracking-tight font-manrope">
+                البنك الرقمي
+            </div>
+<div class="flex gap-4">
+<button class="p-2 rounded-full hover:bg-[#e0e3e5] transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">help_outline</span>
+</button>
+<button class="p-2 rounded-full hover:bg-[#e0e3e5] transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">language</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow flex items-center justify-center pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+<div class="w-full max-w-5xl grid grid-cols-1 lg:grid-cols-2 gap-0 overflow-hidden rounded-xl shadow-2xl bg-surface-container-lowest">
+<!-- Left Side: Visual/Branding (Hidden on mobile) -->
+<div class="hidden lg:block relative overflow-hidden bg-primary-container">
+<div class="absolute inset-0 bg-gradient-to-br from-primary to-primary-container opacity-90"></div>
+<img alt="Bank Registration" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay" data-alt="Modern minimalist architectural interior with clean lines and soft blue lighting creating a professional banking atmosphere" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfHU1BWDvhnibvtrMA65zLgTaURZxgE4pO3kfH7-03DCv40B1JYUHd_svrHAtOliiqwgsjeHSYnnipwQqLHZFXWWaaTTlHZJuO-5kb1n2ArlV6WR2hKNh-hBikYPNyRtvP_4T1kjmOdlwbF3nCq09OJnfHiH4tnVcWyoXUbZcNDwKp0dqQ5a5QQ2i52it76DTudwakL3o7ylFgPoPDuITjiFNJ67C7gmuWMmZJXYiNqmMBjRi8yFYxD6Hpy-wNJ-it8s68HpfDBew"/>
+<div class="relative z-10 h-full flex flex-col justify-center p-12 text-on-primary">
+<h2 class="text-4xl font-extrabold mb-6 font-headline leading-tight">مرحباً بك في مستقبل الخدمات المصرفية</h2>
+<p class="text-lg opacity-90 leading-relaxed font-body">انضم إلى آلاف المستخدمين الذين يثقون في حلولنا المالية الرقمية المبتكرة. ابدأ رحلتك اليوم بخطوات بسيطة.</p>
+<div class="mt-12 space-y-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<h3 class="font-bold">أمان عالي</h3>
+<p class="text-sm opacity-80">نستخدم أحدث تقنيات التشفير لحماية بياناتك</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined">speed</span>
+</div>
+<div>
+<h3 class="font-bold">سرعة التنفيذ</h3>
+<p class="text-sm opacity-80">عمليات فورية وإدارة مالية سلسة</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Registration Form -->
+<div class="p-8 lg:p-12 flex flex-col justify-center bg-surface-container-lowest">
+<div class="mb-10">
+<h1 class="text-3xl font-extrabold text-on-surface mb-2 font-headline">إنشاء حساب جديد</h1>
+<p class="text-on-surface-variant font-body">يرجى إدخال بياناتك الشخصية لبدء عملية التسجيل</p>
+</div>
+<form class="space-y-6 rtl">
+<!-- Name Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="first-name">الاسم الأول</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-t-lg outline-none" id="first-name" placeholder="مثال: محمد" type="text"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="last-name">الاسم الأخير</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-t-lg outline-none" id="last-name" placeholder="مثال: أحمد" type="text"/>
+</div>
+</div>
+<!-- Date and Email -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="dob">تاريخ الميلاد</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-t-lg outline-none appearance-none" id="dob" type="date"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="email">البريد الإلكتروني</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-t-lg outline-none" id="email" placeholder="name@example.com" type="email"/>
+</div>
+</div>
+<!-- Phone and Password -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="phone">رقم الهاتف</label>
+<div class="flex gap-0">
+<span class="bg-surface-container-high px-3 py-3 rounded-tr-lg border-b-2 border-outline-variant text-sm flex items-center">+966</span>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-tl-lg outline-none" id="phone" placeholder="5XXXXXXXX" type="tel"/>
+</div>
+</div>
+<div class="flex flex-col gap-1">
+<label class="text-sm font-semibold text-on-surface-variant mb-1" for="password">كلمة السر</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary-container focus:ring-0 transition-all px-4 py-3 rounded-t-lg outline-none" id="password" placeholder="••••••••" type="password"/>
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant cursor-pointer">visibility</span>
+</div>
+</div>
+</div>
+<!-- Terms Checkbox -->
+<div class="flex items-start gap-3 py-2">
+<input class="mt-1 w-5 h-5 text-primary rounded border-outline-variant focus:ring-primary" id="terms" type="checkbox"/>
+<label class="text-sm text-on-surface-variant leading-relaxed" for="terms">
+                            أوافق على <a class="text-primary font-bold hover:underline" href="#">الشروط والأحكام</a> و <a class="text-primary font-bold hover:underline" href="#">سياسة الخصوصية</a> الخاصة بالبنك الرقمي.
+                        </label>
+</div>
+<!-- Submit Button -->
+<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-xl text-lg shadow-lg hover:shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2" type="submit">
+                        إنشاء حساب
+                        <span class="material-symbols-outlined">arrow_back</span>
+</button>
+<!-- Login Redirect -->
+<p class="text-center text-on-surface-variant mt-6">
+                        لديك حساب بالفعل؟ <a class="text-primary font-bold hover:underline" href="#">تسجيل الدخول</a>
+</p>
+</form>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-8 mt-auto border-t border-[#c3c5d9]/15 bg-[#f7f9fb] dark:bg-slate-950">
+<div class="flex flex-col md:flex-row-reverse items-center justify-between px-8 max-w-7xl mx-auto gap-4 font-inter rtl">
+<div class="flex gap-6">
+<a class="text-[#434656] dark:text-slate-500 hover:text-[#0052FF] transition-colors text-xs" href="#">الشروط والأحكام</a>
+<a class="text-[#434656] dark:text-slate-500 hover:text-[#0052FF] transition-colors text-xs" href="#">سياسة الخصوصية</a>
+<a class="text-[#434656] dark:text-slate-500 hover:text-[#0052FF] transition-colors text-xs" href="#">اتصل بنا</a>
+</div>
+<div class="text-[#434656] dark:text-slate-500 text-xs">
+                © ٢٠٢٤ البنك الرقمي. جميع الحقوق محفوظة
+            </div>
+</div>
+</footer>
+</body></html>
+
+@code {
+
+}
