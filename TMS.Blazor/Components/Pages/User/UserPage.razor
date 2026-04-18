@@ -1,0 +1,594 @@
+@page "/userdashboard"
+@layout Layout.EmptyLayout
+@inject HttpClient Http
+@using System.Net.Http.Json
+@using TMS.Application.DTOs.Users
+@using TMS.Blazor.Components.Pages.User
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>أيون فاينانس - لوحة تحكم المسؤول</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary-fixed": "#dde1ff",
+                        "outline-variant": "#c3c5d9",
+                        "on-primary-container": "#dfe3ff",
+                        "on-secondary-fixed": "#131b2e",
+                        "tertiary-fixed-dim": "#ffb4a1",
+                        "surface-bright": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e0e3e5",
+                        "primary": "#003ec7",
+                        "on-surface": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "background": "#f7f9fb",
+                        "tertiary-fixed": "#ffdbd2",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#b7c4ff",
+                        "surface-tint": "#004ced",
+                        "on-tertiary": "#ffffff",
+                        "on-background": "#191c1e",
+                        "surface-variant": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#952200",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "inverse-primary": "#b7c4ff",
+                        "error": "#ba1a1a",
+                        "primary-container": "#0052ff",
+                        "surface-container-high": "#e6e8ea",
+                        "secondary": "#565e74",
+                        "on-error-container": "#93000a",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-container": "#bf3003",
+                        "on-primary-fixed-variant": "#0038b6",
+                        "on-primary-fixed": "#001452",
+                        "surface-container-low": "#f2f4f6",
+                        "on-tertiary-container": "#ffddd5",
+                        "on-surface-variant": "#434656",
+                        "on-tertiary-fixed-variant": "#891e00",
+                        "surface": "#f7f9fb",
+                        "secondary-fixed": "#dae2fd",
+                        "surface-container": "#eceef0",
+                        "on-secondary-container": "#5c647a",
+                        "secondary-container": "#dae2fd",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-tertiary-fixed": "#3c0800",
+                        "outline": "#737688"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar -->
+<aside class="bg-slate-50 dark:bg-slate-900 h-screen w-64 fixed right-0 top-0 border-l border-slate-200 dark:border-slate-800 flex flex-col h-full py-6 px-4 rtl z-50">
+<div class="mb-10 px-2">
+<h1 class="text-2xl font-bold tracking-tight text-blue-700 dark:text-blue-500 mb-1">بنك المبرمجين</h1>
+<p class="text-xs text-on-surface-variant">نظام إدارة البنك</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-blue-700 dark:text-blue-400 font-bold border-r-4 border-blue-700 dark:border-blue-400 bg-blue-50/50 dark:bg-blue-900/20 rounded-l-xl" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-medium">المشرفين</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-slate-200 dark:border-slate-800 pt-4">
+<button class="w-full flex items-center gap-3 px-4 py-3 text-error hover:bg-error-container/20 transition-colors duration-200 rounded-xl">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-medium">تسجيل الخروج</span>
+</button>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 left-0 right-64 h-16 z-40 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md flex items-center justify-between px-8 w-full rtl shadow-sm dark:shadow-none">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional male executive portrait with confident expression in a corporate environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNej3V_bNuu3wG5P-knbprNW916Ivvi4tmB9Jk0QEqvJY_CqCxFPCVdj5NnbhaT5kK12WKkD2JmMx-QtnSzUjhaXXVDEmZlhDErfbpWE1-Qud7yVxlUYBALkrGvx_eRs6CUYuUhoHrNqOdEUfqTXYI9lxIu2Yqnwo_Qes-6HURR0Y_6suzsuo7QppYPvDrs42Mumyjtx0bFXFzkmonrkL5t_jD2ny4S2nhyFctxAXVIAC--heCs7tO14XHbSUDPAdxryys0UOiXLc"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">المشرف الرئيسي</p>
+<p class="text-xs text-on-surface-variant">أهلا بك مجدداً</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute inset-y-0 right-3 flex items-center text-outline">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="bg-surface-container-low border-none rounded-full py-2 pr-10 pl-4 text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="البحث في النظام..." type="text"/>
+</div>
+<div class="flex gap-3">
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all duration-300">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-600 dark:text-slate-400 hover:text-blue-600 transition-all duration-300">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="mr-64 pt-24 px-8 pb-12 space-y-12">
+<!-- Dashboard Hero / Wealth Card Style Header -->
+<section class="relative bg-primary-container rounded-xl p-10 overflow-hidden text-on-primary">
+<div class="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+<div class="relative z-10">
+<h2 class="text-4xl font-extrabold mb-2 headline">إدارة النظام والمسؤولين</h2>
+<p class="text-blue-100 max-w-xl opacity-90">تحكم كامل في الحسابات، صلاحيات المشرفين، ومراقبة النشاط البنكي بأعلى معايير الأمان العالمية.</p>
+</div>
+</section>
+<!-- Management Sections: Bento Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Admin Management & Add Admin (Left Side) -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<!-- Add New Admin Form -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-xl font-bold headline">إضافة مسؤول جديد</h3>
+<span class="material-symbols-outlined text-primary">person_add</span>
+</div>
+<form class="space-y-6" @onsubmit="HandleAddUserAsync" @onsubmit:preventDefault="true">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">الاسم الأول</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" placeholder="مثال: أحمد" type="text" @bind="newUser.FirstName"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">الاسم الأخير</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" placeholder="مثال: العلي" type="text" @bind="newUser.LastName"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">تاريخ الميلاد</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" type="date" @bind="newUser.BirthDate"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">البريد الإلكتروني</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" placeholder="admin@aeon.com" type="email" @bind="newUser.Email"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">كلمة السر</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" placeholder="••••••••" type="password" @bind="newUser.Password"/>
+</div>
+<div class="space-y-1">
+<label class="text-xs font-semibold text-on-surface-variant px-1">رقم الهاتف</label>
+<input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary border-t-0 border-x-0 rounded-t-lg px-4 py-3 outline-none transition-all" placeholder="+966 5x xxxx xxx" type="tel" @bind="newUser.PhoneNumber"/>
+</div>
+<button @onclick="HandleAddUserAsync" class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-bold text-lg hover:opacity-90 active:scale-95 transition-all mt-4" type="submit" disabled=true>
+                            إضافة المسؤول
+                        </button>
+</form>
+</div>
+<!-- Admin Search & Cards -->
+<div class="bg-surface-container-low rounded-xl p-8">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-bold headline">إدارة المسؤولين الحالية</h3>
+<div class="relative">
+<input class="bg-surface-container-lowest border-none rounded-full py-2 pr-10 pl-4 text-xs w-48 focus:ring-1 focus:ring-primary" placeholder="بحث بالاسم..." type="text" @bind="searchText" @bind:event="oninput"/>
+<span class="absolute inset-y-0 right-3 flex items-center text-outline">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+</div>
+</div>
+<div class="space-y-4">
+@if (isLoading)
+{
+<div class="bg-surface-container-lowest p-5 rounded-xl text-sm text-on-surface-variant">Loading users...</div>
+}
+else
+{
+@if (!string.IsNullOrWhiteSpace(loadError))
+{
+<div class="bg-error-container/40 text-on-surface p-5 rounded-xl text-sm">@loadError</div>
+}
+
+@if (FilteredUsers.Count == 0)
+{
+<div class="bg-surface-container-lowest p-5 rounded-xl text-sm text-on-surface-variant">No users match the current search.</div>
+}
+else
+{
+@foreach (var user in FilteredUsers)
+{
+<Usercard User="user" OnDelete="HandleDeleteUserAsync" />
+}
+}
+}
+</div>
+</div>
+</div>
+</div>
+<!-- Accounts Table (Right Side) -->
+<div class="col-span-12 lg:col-span-7">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm h-full flex flex-col">
+<div class="p-8 border-b border-surface-container">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="text-2xl font-bold headline mb-1">الحسابات المسجلة</h3>
+<p class="text-sm text-on-surface-variant">قائمة بجميع العملاء المسجلين في النظام</p>
+</div>
+<button class="flex items-center gap-2 text-primary font-bold hover:bg-blue-50 px-4 py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+<span class="text-sm">تصفية</span>
+</button>
+</div>
+</div>
+<div class="flex-1 overflow-x-auto no-scrollbar">
+<table class="w-full text-right border-collapse">
+<thead>
+<tr class="text-xs font-bold text-outline uppercase tracking-wider bg-surface-container-low">
+<th class="px-8 py-5">الاسم والبيانات</th>
+<th class="px-6 py-5">البريد الإلكتروني</th>
+<th class="px-6 py-5">تاريخ التسجيل</th>
+<th class="px-6 py-5 text-center">الحالة</th>
+<th class="px-8 py-5"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- Table Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">أه</div>
+<span class="font-bold text-on-surface">أحمد هاشم</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">ahmed.h@gmail.com</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">12 أكتوبر 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-green-100 text-green-700">نشط</span>
+</td>
+<td class="px-8 py-5 text-left">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-purple-100 text-purple-700 flex items-center justify-center font-bold text-sm">لم</div>
+<span class="font-bold text-on-surface">ليلى محمد</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">laila.m@outlook.com</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">15 أكتوبر 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-green-100 text-green-700">نشط</span>
+</td>
+<td class="px-8 py-5 text-left">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-orange-100 text-orange-700 flex items-center justify-center font-bold text-sm">فس</div>
+<span class="font-bold text-on-surface">فهد السالم</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">fahad.s@aeon.sa</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">18 أكتوبر 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-error-container text-error">معلق</span>
+</td>
+<td class="px-8 py-5 text-left">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm">نص</div>
+<span class="font-bold text-on-surface">نورة صالح</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">noura.s@webmail.com</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">20 أكتوبر 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-green-100 text-green-700">نشط</span>
+</td>
+<td class="px-8 py-5 text-left">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Table Row 5 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-8 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center font-bold text-sm">يخ</div>
+<span class="font-bold text-on-surface">ياسر خالد</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">yasser.k@aeon.com</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">22 أكتوبر 2023</td>
+<td class="px-6 py-5 text-center">
+<span class="px-3 py-1 rounded-full text-[10px] font-extrabold bg-surface-variant text-on-surface-variant">مغلق</span>
+</td>
+<td class="px-8 py-5 text-left">
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-6 border-t border-surface-container-low flex items-center justify-between">
+<span class="text-xs text-on-surface-variant">عرض 5 من أصل 1240 حساب</span>
+<div class="flex gap-2">
+<button class="p-2 rounded bg-surface-container-low text-on-surface disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+<button class="p-2 rounded bg-primary text-white">
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+</body></html>
+@code {
+    private readonly List<string> accentClasses =
+    [
+        "border-primary",
+        "border-secondary",
+        "border-tertiary",
+        "border-outline"
+    ];
+
+    private readonly List<string> avatarClasses =
+    [
+        "bg-blue-50 text-primary",
+        "bg-slate-50 text-slate-500",
+        "bg-orange-100 text-orange-700",
+        "bg-green-100 text-green-700"
+    ];
+
+    private List<UserCardModel> users = [];
+    private UserFormModel newUser = new();
+    private string searchText = string.Empty;
+    private bool isLoading;
+    private bool isSubmitting;
+    private string? loadError;
+
+    private List<UserCardModel> FilteredUsers =>
+        users
+            .Where(user =>
+                string.IsNullOrWhiteSpace(searchText) ||
+                user.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                user.Email.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
+                user.Role.Contains(searchText, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        await LoadUsersAsync();
+    }
+
+    private async Task LoadUsersAsync()
+    {
+        isLoading = true;
+        loadError = null;
+
+        try
+        {
+            users = await GetUsersAsync();
+        }
+        catch
+        {
+            loadError = "Unable to load users from the API right now. Sample data is shown until the endpoint is ready.";
+            users = GetSampleUsers();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task<List<UserCardModel>> GetUsersAsync()
+    {
+        var response = await Http.GetAsync("https://localhost:7192/api/UsersApi/GetAllUsers");
+        if(!response.IsSuccessStatusCode)
+        {
+            throw new Exception("API request failed");
+        }
+
+        var apiUsers = await response.Content.ReadFromJsonAsync<List<UserDTO>>();
+
+        return apiUsers is { Count: > 0 }
+            ? apiUsers.Select(MapToCardModel).ToList()
+            : GetSampleUsers();
+    }
+
+    private async Task AddUser(UserFormModel form)
+    {
+        try{
+            UserToAddDTO u=new();
+            Random rnd=new Random();
+            u.UserName="Admin000";
+            u.Password=form.Password;
+            u.PersonId=rnd.Next(1,100);
+        var respone= await Http.PostAsJsonAsync("http://localhost:5000/api/UsersApi/AddUser", u);
+        if(respone.IsSuccessStatusCode)
+        {
+            var newstudent = await respone.Content.ReadFromJsonAsync<UserToAddDTO>();
+            Console.WriteLine($"User added with ID: {newstudent?.PersonId} , name: {newstudent?.UserName}, password: {newstudent?.Password}");
+        }
+        else
+        {
+           Console.WriteLine($"Failed to add user. Status code: {respone.StatusCode}");
+        }}
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error adding user: {ex.Message}");
+        }
+    }
+    private async Task HandleAddUserAsync()
+    {
+        if (isSubmitting || string.IsNullOrWhiteSpace(newUser.FirstName) || string.IsNullOrWhiteSpace(newUser.LastName))
+        {
+            return;
+        }
+
+        isSubmitting = true;
+
+        try
+        {
+           
+
+           await AddUser(newUser);
+                
+            newUser = new UserFormModel();
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private Task HandleDeleteUserAsync(int userId)
+    {
+        var user = users.FirstOrDefault(item => item.Id == userId);
+
+        if (user is not null)
+        {
+            users.Remove(user);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private UserCardModel MapToCardModel(UserDTO user)
+    {
+        var paletteIndex = Math.Abs(user.Id) % accentClasses.Count;
+
+        return new UserCardModel
+        {
+            Id = user.Id,
+            FullName = string.IsNullOrWhiteSpace(user.PersonFullName) ? user.UserName : user.PersonFullName,
+            Email = BuildEmail(user),
+            Role = string.IsNullOrWhiteSpace(user.CreatedByUserName) ? "System User" : $"Created by {user.CreatedByUserName}",
+            AccentClass = accentClasses[paletteIndex],
+            AvatarClass = avatarClasses[paletteIndex]
+        };
+    }
+
+    private UserCardModel CreateCardFromForm(UserFormModel form)
+    {
+        var nextId = users.Count == 0 ? 1 : users.Max(user => user.Id) + 1;
+        var paletteIndex = nextId % accentClasses.Count;
+        var fullName = $"{form.FirstName} {form.LastName}".Trim();
+
+        return new UserCardModel
+        {
+            Id = nextId,
+            FullName = fullName,
+            Email = string.IsNullOrWhiteSpace(form.Email) ? $"{BuildUserName(form)}@example.com" : form.Email,
+            Role = "Pending API sync",
+            AccentClass = accentClasses[paletteIndex],
+            AvatarClass = avatarClasses[paletteIndex]
+        };
+    }
+
+    private List<UserCardModel> GetSampleUsers() =>
+    [
+        new UserCardModel
+        {
+            Id = 1,
+            FullName = "Sara Almansour",
+            Email = "sara.m@aeon.com",
+            Role = "Finance Admin",
+            AccentClass = accentClasses[0],
+            AvatarClass = avatarClasses[0]
+        },
+        new UserCardModel
+        {
+            Id = 2,
+            FullName = "Khaled Alotaibi",
+            Email = "k.otaibi@aeon.com",
+            Role = "Technical Admin",
+            AccentClass = accentClasses[1],
+            AvatarClass = avatarClasses[1]
+        }
+    ];
+
+    private static string BuildEmail(UserDTO user)
+    {
+        if (user.UserName.Contains('@'))
+        {
+            return user.UserName;
+        }
+
+        return $"{user.UserName}@example.com";
+    }
+
+    private static string BuildUserName(UserFormModel form) =>
+        $"{form.FirstName}.{form.LastName}"
+            .Trim('.')
+            .Replace(" ", string.Empty)
+            .ToLowerInvariant();
+
+    private sealed class UserFormModel
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public DateTime? BirthDate { get; set; }
+        public string Email { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; } = string.Empty;
+    }
+    private sealed class UserModel
+    {
+       
+        public string? userName{get; set;}
+        public string? password{get; set;}
+        public int personId{get;set;}
+    }
+}
+

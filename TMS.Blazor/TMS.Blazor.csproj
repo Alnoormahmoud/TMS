@@ -6,4 +6,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="stitch_modern_banking_ui\**" />
+    <Content Remove="stitch_modern_banking_ui\**" />
+    <EmbeddedResource Remove="stitch_modern_banking_ui\**" />
+    <None Remove="stitch_modern_banking_ui\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TMS.API\TMS.API.csproj" />
+    <ProjectReference Include="..\TMS.Application\TMS.Application.csproj" />
+  </ItemGroup>
+
 </Project>

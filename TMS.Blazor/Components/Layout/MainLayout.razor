@@ -1,13 +1,59 @@
 ﻿@inherits LayoutComponentBase
-<Topnav></Topnav>
 
-    <Sidebarcom></Sidebarcom>
-    <main>
-       
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm shadow-blue-900/5 no-border-tonal-shift">
+<div class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+<div class="font-headline font-extrabold text-blue-700 dark:text-blue-500 tracking-tight text-xl">بنك المبرمجين</div>
+<div class="flex items-center space-x-reverse space-x-4">
+<div class="flex items-center space-x-reverse space-x-2 ml-4">
+<button class="p-2 text-slate-500 hover:text-blue-600 transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-blue-600 transition-colors">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<img alt="User profile photo" class="w-10 h-10 rounded-full border-2 border-surface-container-high object-cover" data-alt="Professional headshot of a middle-aged executive man with a kind smile, clean corporate background, soft studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhznnWAFMC3ozq9GHnvs4-WuK1EwMP4eATSnUYfkykqNbAx8FYsOJs3sEskFr5RvzuLdKDUDEEKHiX5kKAejCm0JHbUoLBzHHjB3ukrUL5PtDB-Zgi58e1hn8J7wG5WvSu29GyL49ampVcjIVhORqem4c4QXMrxgDLHu6lty6O2IxC6XtbjLQAdTF027EOQQuO-sHAc6NS_9aL-cZJmBNIiU2m9W5csMNdUgL9or-BE7z3wrobP6dW8Uij992clCq4qYnWBbOrYVc"/>
+</div>
+</div>
+</header>
+<div class="flex pt-20">
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden md:flex flex-col p-4 space-y-2 h-screen w-64 fixed right-0 bg-white dark:bg-slate-900 border-l-0 tonal-shift-bg-slate-100">
+<div class="mb-8 px-4 py-6">
+<div class="text-xl font-bold text-blue-700 mb-1">الخدمات المصرفية الخاصة</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center space-x-reverse space-x-3 px-4 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-xl font-headline text-sm font-semibold active:-translate-x-1 duration-150" href="/dashboard">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>لوحة التحكم</span>
+</a>
+<a class="flex items-center space-x-reverse space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 font-headline text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:-translate-x-1 duration-150" href="/send">
+<span class="material-symbols-outlined" data-icon="send">send</span>
+<span>إرسال أموال</span>
+</a>
+<a class="flex items-center space-x-reverse space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 font-headline text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:-translate-x-1 duration-150" href="/receive">
+<span class="material-symbols-outlined" data-icon="qr_code_2">qr_code_2</span>
+<span>استلام أموال</span>
+</a>
+<a class="flex items-center space-x-reverse space-x-3 px-4 py-3 text-slate-600 dark:text-slate-400 font-headline text-sm font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-all active:-translate-x-1 duration-150" href="info">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span>الملف الشخصي</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pb-12">
 
+</div>
+</aside>
+</div>
+<!-- Main Content Canvas -->
 
+<div class="Page">
+@Body
 
+</div>
+<div id="blazor-error-ui">
+    An unhandled error has occurred.
+    <a href="" class="reload">Reload</a>
+    <a class="dismiss">🗙</a>
+</div>
