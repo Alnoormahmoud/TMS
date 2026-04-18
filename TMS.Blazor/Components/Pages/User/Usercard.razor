@@ -1,0 +1,44 @@
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+<div class="bg-surface-container-lowest p-5 rounded-xl border-r-4 border-primary flex items-center justify-between group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">@Name سارة المنصور</p>
+<p class="text-xs text-on-surface-variant">sara.m@aeon.com • مشرف مالي</p>
+</div>
+</div>
+<button class="p-2 rounded-full text-error hover:bg-error-container/10 transition-colors">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+
+@code
+{
+    private List<UserDTO>? users;
+private string Name { get; set; } = string.Empty;
+    protected override  async Task OnInitializedAsync()
+    {
+        try
+        {
+            Http.BaseAddress = new Uri("http://localhost:5000/api/UsersApi/");
+            var respone =await Http.GetAsync("GetAllUsers");
+            if(respone.IsSuccessStatusCode)
+
+            {
+                users = await respone.Content.ReadFromJsonAsync<List<UserDTO>>();
+
+                if(users!=null && users.Count>0)
+                {
+                    Name = users[0].PersonFullName;
+                }
+
+            }
+        }
+        catch{}
+    }
+
+}

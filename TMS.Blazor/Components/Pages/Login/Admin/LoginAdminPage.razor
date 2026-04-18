@@ -1,4 +1,6 @@
 ﻿@page "/admin"
+@page "/"
+@layout Layout.LoginLayout
 @rendermode InteractiveServer
 
 <!DOCTYPE html>
@@ -92,18 +94,8 @@
     </style>
 </head>
 <body class="bg-surface font-body text-on-surface min-h-screen flex flex-col">
-<!-- TopNavBar (Shared Component) -->
-<header class="fixed top-0 w-full z-50 bg-[#f7f9fb]/80 dark:bg-slate-950/80 backdrop-blur-xl">
-<nav class="flex flex-row-reverse justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto font-manrope rtl text-right">
-<div class="text-2xl font-bold text-[#191c1e] dark:text-white tracking-tight">
-                البنك الرقمي
-            </div>
-<div class="flex items-center gap-6">
-<span class="material-symbols-outlined text-[#434656] dark:text-slate-400 hover:bg-[#e0e3e5] p-2 rounded-full transition-colors cursor-pointer" data-icon="language">language</span>
-<span class="material-symbols-outlined text-[#434656] dark:text-slate-400 hover:bg-[#e0e3e5] p-2 rounded-full transition-colors cursor-pointer" data-icon="help_outline">help_outline</span>
-</div>
-</nav>
-</header>
+
+
 <!-- Main Content Canvas -->
 <main class="flex-grow flex items-center justify-center px-6 pt-24 pb-12">
 <div class="w-full max-w-5xl flex flex-col md:flex-row bg-surface-container-lowest rounded-xl overflow-hidden shadow-2xl shadow-on-surface/5">

@@ -13,4 +13,9 @@
     <None Remove="stitch_modern_banking_ui\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TMS.API\TMS.API.csproj" />
+    <ProjectReference Include="..\TMS.Application\TMS.Application.csproj" />
+  </ItemGroup>
+
 </Project>
